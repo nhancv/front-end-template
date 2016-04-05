@@ -4,7 +4,7 @@ var gulp = require('gulp');
 // JS hint task
 var jshint = require('gulp-jshint');
 var changed = require('gulp-changed');
-gulp.task('jshint', function() {
+gulp.task('jshint', function () {
     gulp.src('./src/scripts/*.js')
         .pipe(jshint())
         .pipe(jshint.reporter('default'));
@@ -12,7 +12,7 @@ gulp.task('jshint', function() {
 
 // minify new images
 var imagemin = require('gulp-imagemin');
-gulp.task('imagemin', function() {
+gulp.task('imagemin', function () {
     var imgSrc = './src/images/**/*',
         imgDst = './build/images';
 
@@ -24,7 +24,7 @@ gulp.task('imagemin', function() {
 
 // minify all html files
 var minifyHTML = require('gulp-minify-html');
-gulp.task('htmlpage', function() {
+gulp.task('htmlpage', function () {
     var htmlSrc = './src/*.html',
         htmlDst = './build';
 
@@ -38,18 +38,29 @@ gulp.task('htmlpage', function() {
 var concat = require('gulp-concat');
 var stripDebug = require('gulp-strip-debug');
 var uglify = require('gulp-uglify');
-gulp.task('scripts', function() {
-    gulp.src(['./src/scripts/lib.js','./src/scripts/*.js'])
-        .pipe(concat('script.js'))
-        .pipe(stripDebug())
+gulp.task('scripts', function () {
+    gulp.src(['./src/scripts/lib.js', './src/scripts/*.js'])
+        .pipe(concat('main.js'))
+        //.pipe(stripDebug())
         .pipe(uglify())
         .pipe(gulp.dest('./build/scripts/'));
+});
+
+// Compile TypeScript
+var ts = require('gulp-typescript');
+gulp.task('scripts-ts', function () {
+    gulp.src(['./src/scripts/*.ts'])
+        .pipe(ts({
+            noImplicitAny: true,
+            out: 'output.js'
+        }))
+        .pipe(gulp.dest('./src/scripts/'));
 });
 
 // CSS concat, auto-prefix and minify
 var autoprefix = require('gulp-autoprefixer');
 var minifyCSS = require('gulp-minify-css');
-gulp.task('styles', function() {
+gulp.task('styles', function () {
     gulp.src(['./src/styles/*.css'])
         .pipe(concat('styles.css'))
         .pipe(autoprefix('last 2 versions'))
@@ -58,21 +69,22 @@ gulp.task('styles', function() {
 });
 
 // default gulp task
-gulp.task('default', ['imagemin', 'htmlpage', 'scripts', 'styles'], function() {
+gulp.task('default', ['imagemin', 'htmlpage', 'scripts-ts', 'scripts', 'styles'], function () {
+    var page = ['htmlpage'];
+    var style = ['styles'];
+    var script_ts = ['scripts-ts'];
+    var script = ['jshint', 'scripts'];
     // watch for HTML changes
-    gulp.watch('./src/*.html', function() {
-        gulp.run('htmlpage');
-    });
+    gulp.watch('./src/*.html', page);
+
+    // watch for TS changes
+    gulp.watch('./src/scripts/*.ts', script_ts);
 
     // watch for JS changes
-    gulp.watch('./src/scripts/*.js', function() {
-        gulp.run('jshint', 'scripts');
-    });
+    gulp.watch('./src/scripts/*.js', script);
 
     // watch for CSS changes
-    gulp.watch('./src/styles/*.css', function() {
-        gulp.run('styles');
-    });
+    gulp.watch('./src/styles/*.css', style);
 });
 
 
