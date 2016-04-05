@@ -57,6 +57,8 @@ gulp.task('styles', function() {
         .pipe(gulp.dest('./build/styles/'));
 });
 
-
+// default gulp task
+gulp.task('default', ['imagemin', 'htmlpage', 'scripts', 'styles'], function() {
+});
 
 
