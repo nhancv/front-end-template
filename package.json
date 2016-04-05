@@ -1,6 +1,6 @@
 {
   "name": "front-end-template",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "template for front end project work with typescript, gulp",
   "main": "index.js",
   "scripts": {
