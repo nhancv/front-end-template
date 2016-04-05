@@ -1,13 +1,9 @@
 // include gulp
 var gulp = require('gulp');
 
-// include plug-ins
+// JS hint task
 var jshint = require('gulp-jshint');
 var changed = require('gulp-changed');
-var imagemin = require('gulp-imagemin');
-var minifyHTML = require('gulp-minify-html');
-
-// JS hint task
 gulp.task('jshint', function() {
     gulp.src('./src/scripts/*.js')
         .pipe(jshint())
@@ -15,6 +11,7 @@ gulp.task('jshint', function() {
 });
 
 // minify new images
+var imagemin = require('gulp-imagemin');
 gulp.task('imagemin', function() {
     var imgSrc = './src/images/**/*',
         imgDst = './build/images';
@@ -26,6 +23,7 @@ gulp.task('imagemin', function() {
 });
 
 // minify all html files
+var minifyHTML = require('gulp-minify-html');
 gulp.task('htmlpage', function() {
     var htmlSrc = './src/*.html',
         htmlDst = './build';
@@ -36,3 +34,14 @@ gulp.task('htmlpage', function() {
         .pipe(gulp.dest(htmlDst));
 });
 
+// JS concat, strip debugging and minify
+var concat = require('gulp-concat');
+var stripDebug = require('gulp-strip-debug');
+var uglify = require('gulp-uglify');
+gulp.task('scripts', function() {
+    gulp.src(['./src/scripts/lib.js','./src/scripts/*.js'])
+        .pipe(concat('script.js'))
+        .pipe(stripDebug())
+        .pipe(uglify())
+        .pipe(gulp.dest('./build/scripts/'));
+});
