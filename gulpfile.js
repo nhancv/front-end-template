@@ -45,3 +45,18 @@ gulp.task('scripts', function() {
         .pipe(uglify())
         .pipe(gulp.dest('./build/scripts/'));
 });
+
+// CSS concat, auto-prefix and minify
+var autoprefix = require('gulp-autoprefixer');
+var minifyCSS = require('gulp-minify-css');
+gulp.task('styles', function() {
+    gulp.src(['./src/styles/*.css'])
+        .pipe(concat('styles.css'))
+        .pipe(autoprefix('last 2 versions'))
+        .pipe(minifyCSS())
+        .pipe(gulp.dest('./build/styles/'));
+});
+
+
+
+
