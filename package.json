@@ -6,8 +6,21 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nhancv/front-end-template.git"
+  },
+  "keywords": [
+    "front",
+    "end",
+    "template"
+  ],
+  "author": "Nhan Cao <nhancv1992@gmail.com> (http://nhancv.github.io)",
   "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nhancv/front-end-template/issues"
+  },
+  "homepage": "https://github.com/nhancv/front-end-template#readme",
   "devDependencies": {
     "gulp": "^3.9.1",
     "gulp-autoprefixer": "^3.1.0",
