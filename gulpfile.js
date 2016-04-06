@@ -68,8 +68,24 @@ gulp.task('styles', function () {
         .pipe(gulp.dest('./build/styles/'));
 });
 
+//SCSS
+var sass = require('gulp-sass');
+var input = './stylesheets/**/*.scss';
+var output = './public/css';
+var sassOptions = {
+    errLogToConsole: true,
+    outputStyle: 'expanded'
+};
+
+gulp.task('sass', function () {
+    return gulp
+        .src('./src/styles/*.scss')
+        .pipe(sass(sassOptions).on('error', sass.logError))
+        .pipe(gulp.dest('./src/styles/'));
+});
+
 // default gulp task
-gulp.task('default', ['imagemin', 'htmlpage', 'scripts-ts', 'scripts', 'styles'], function () {
+gulp.task('default', ['imagemin', 'htmlpage', 'scripts-ts', 'scripts', 'sass', 'styles'], function () {
     var page = ['htmlpage'];
     var style = ['styles'];
     var script_ts = ['scripts-ts'];
@@ -83,8 +99,14 @@ gulp.task('default', ['imagemin', 'htmlpage', 'scripts-ts', 'scripts', 'styles']
     // watch for JS changes
     gulp.watch('./src/scripts/*.js', script);
 
+    gulp.watch('./src/styles/*.scss', ['sass'])
+        .on('change', function(event) {
+            console.log('File ' + event.path + ' was ' + event.type + ', running tasks...');
+        });
+
     // watch for CSS changes
     gulp.watch('./src/styles/*.css', style);
+
 });
 
 
